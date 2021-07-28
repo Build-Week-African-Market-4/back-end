@@ -1,20 +1,26 @@
-const db = require('../../data/db-config')
+const db = require('../../data/db-config');
 
 function find(){
-    return console.log('find');
-}
+    return db('users')
+};
 
 function findBy(filter){
-    return console.log('findBy');
-}
+    return db('users')
+        .select('*')
+        .where(filter)
+};
 
 function findById(id){
-    return console.log('findById');
-}
+    return db('users')
+        .select('*')
+        .where('id', id)
+        .first()
+};
 
-function add(user){
-    return console.log('add');
-}
+async function add(user){
+    const [newUser] = await db('users').insert(user, '*')
+    return newUser
+};
 
 module.exports = {
     find,
