@@ -14,16 +14,13 @@ server.use(cors());
 server.use(express.json());
 server.use(cookieParser);
 
-server.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-  });
+const corsOptions = {
+    origin: 'https://african-marketplace-lambda.herokuapp.com',
+    optionsSuccessStatus: 200
+  }
 
-server.use('/api/auth', authRouter);
-server.use('/api/market', restricted, marketRouter);
+server.use('/api/auth', cors(corsOptions), authRouter);
+server.use('/api/market', cors(corsOptions), restricted, marketRouter);
 
 server.get('/', (req, res, next) => {
     res.json({
