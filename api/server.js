@@ -14,13 +14,21 @@ server.use(cors());
 server.use(express.json());
 server.use(cookieParser);
 
-const corsOptions = {
-    origin: 'https://african-marketplace-lambda.herokuapp.com',
-    optionsSuccessStatus: 200
-  }
+// const corsOptions = {
+//     origin: 'https://african-marketplace-lambda.herokuapp.com',
+//     optionsSuccessStatus: 200
+//   }
 
-server.use('/api/auth', cors(corsOptions), authRouter);
-server.use('/api/market', cors(corsOptions), restricted, marketRouter);
+var allowCrossDomain = function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+};
+
+server.use(allowCrossDomain);
+
+server.use('/api/auth', authRouter);
+server.use('/api/market', restricted, marketRouter);
 
 server.get('/', (req, res, next) => {
     res.json({
